@@ -31,9 +31,9 @@ $ NODE_ENV=production ACCESS_KEY_ID=<DO-ACCESS-KEY-ID> SECRET_ACCESS_KEY=<DO-SEC
 And you are done!
 
 If you are using ```connect-assets```, just mention the serverPath as follows:
-```json
+```
 { 
-  servePath: 'https://<bucket-name>.<region-name>.digitaloceanspaces.com/<folder-name>/'
+  'servePath': 'https://<bucket-name>.<region-name>.digitaloceanspaces.com/<folder-name>/'
 }
 ```
 Now all the assets loaded using js, css and assetPath methods will start loading assets from DO Spaces!
