@@ -5,11 +5,12 @@ const s3_utils = require('./s3_utils');
 
 module.exports = function (options) {
   options = options || {};
-  console.log(options);
-  glob(options.assetsPath+'/**/@(*.js|*.css)', function(error, files) {
+  glob(options.assetsPath+'/**/*', function(error, files) {
     for(var i = 0; i < files.length; i++) {
       var file_path = files[i];
       
+      if(fs.lstatSync(file_path).isDirectory())
+        continue;
       
       var fileFolder = file_path.replace(options.assetsPath,'');
       fileFolder = fileFolder.replace(path.basename(file_path),'')
