@@ -5,6 +5,8 @@ const s3_utils = require('./s3_utils');
 
 module.exports = function (options) {
   options = options || {};
+  if(process.env.NODE_ENV !== 'production')
+    return
   glob(options.assetsPath+'/**/*', function(error, files) {
     for(var i = 0; i < files.length; i++) {
       var file_path = files[i];

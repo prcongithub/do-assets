@@ -22,6 +22,7 @@ const spacesConfig = {
 };
 
 const host = bucketName+'.'+regionName+'.digitaloceanspaces.com';
+const regionHost = regionName+'.digitaloceanspaces.com';
 
 var upload = function(key,mimeType,file_path,callback) {
   var body = fs.readFileSync(file_path);
@@ -34,7 +35,8 @@ var upload = function(key,mimeType,file_path,callback) {
     headers: {
       'Content-Length': Buffer.byteLength(body),
       'Content-Type': mimeType,
-      'x-amz-acl': 'public-read'
+      'x-amz-acl': 'public-read',
+      accept: 'application/json'
     },
     body: body
   },spacesConfig);
@@ -59,6 +61,39 @@ var upload = function(key,mimeType,file_path,callback) {
   s3Req.end();
 }
 
+var get = function(host, path, callback) {
+  var opts = aws4.sign({
+    host: host,
+    method: 'GET',
+    path: path,
+    region: regionName,
+    service: serviceName,
+    headers: {
+      accept: 'application/json'
+    }
+  },spacesConfig);
+  //console.log(opts);
+  var s3Req = https.request(opts, function(api_res){
+    var data = "";
+    //console.log("Status: "+api_res.statusCode);
+    api_res.on('data', function (chunk) {
+      data += chunk;
+    });
+    api_res.on('error', function (err) {
+      callback(err,null);
+    });
+    api_res.on('end', function (chunk) {
+      //console.log(data);
+      try{
+        callback(null, JSON.parse(data));
+      } catch(error) {
+        callback(error, null);
+      }
+    });
+  });
+  s3Req.end();
+}
+
 module.exports.uploadServerFile = function(file_path, folder, callback) {
   var file_name = path.basename(file_path).replace(/\s/g,'_');
   var key = folder+"/"+file_name;
@@ -71,5 +106,9 @@ module.exports.uploadFile = function(file, folder, callback){
   var file_name = file.originalname.replace(/\s/,'');
   var key = "uploads/"+file_name;
   upload(key,file.type,file_path,callback);
+}
+
+module.exports.listBuckets = function(callback){
+  get(regionHost,'',callback);
 }
 
