@@ -1,6 +1,6 @@
 {
   "name": "do-assets",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "author": "Prashant Chaudhari <prashant.chaudhari89@gmail.com>",
   "description": "Upload Assets to DO Spaces after application starts",
   "contributors": [],
