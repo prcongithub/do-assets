@@ -105,7 +105,8 @@ module.exports.uploadFile = function(file, folder, callback){
   var file_path = file.path;
   var file_name = file.originalname.replace(/\s/,'');
   var key = "uploads/"+file_name;
-  upload(key,file.type,file_path,callback);
+  console.log(file);
+  upload(key,file.mimetype,file_path,callback);
 }
 
 module.exports.listBuckets = function(callback){
